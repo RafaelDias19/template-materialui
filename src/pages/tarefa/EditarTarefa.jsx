@@ -6,64 +6,51 @@ import Grid from '@mui/material/Grid';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardContent from '@mui/material/CardContent';
-import CardActions from '@mui/material/CardActions';
+// import CardActions from '@mui/material/CardActions';
 import Button from '@mui/material/Button';
 
 //Declaração do componente EditarTarefa, recebendo como props, do Componente ListarTarefa, os states handCloseEditar,
 // idTarefaSelecionada, tarefas, tarefa e setTarefas
 const EditarTarefa = ({handleCloseEditar, idTarefaSelecionada, tarefas, tarefa, setTarefas}) =>{
-  const [idTarefa, setIdTarefa] = useState();
+  const [idTarefa, setIdTarefa] = useState(idTarefaSelecionada);
   const [tituloTarefa, setTituloTarefa] = useState('');
   const [descricaoTarefa, setDescricaoTarefa] = useState('');
   const [inicioTarefa, setInicioTarefa] = useState('');
   const [fimTarefa, setFimTarefa] = useState('');
-  const [recursoTarefa, setRecursoTarefa] = useState('');
   const [statusTarefa, setStatusTarefa] = useState('');
 
   //Abaixo setamos os valores dos states (que popularão o formulário mais abaixo) com os valores do state Tarefa,
   //  recebido como props do componente ListarTarefa.
   useEffect(() => {
-    //console.log('Tarefa selecionada: ' + JSON.stringify(tarefa));
     setIdTarefa(idTarefaSelecionada);
     setTituloTarefa(tarefa.tituloTarefa);
     setDescricaoTarefa(tarefa.descricaoTarefa);
     setInicioTarefa(tarefa.inicioTarefa);
     setFimTarefa(tarefa.fimTarefa);
-    setRecursoTarefa(tarefa.recursoTarefa);
     setStatusTarefa(tarefa.statusTarefa);
-  },[]);
-
-  const handleRecurso = (event) => {
-    setRecursoTarefa(event.target.value);
-  };
+  },[idTarefaSelecionada, tarefa]);
 
   const handleStatus = (event) => {
     setStatusTarefa(event.target.value);
   };
 
   const handleEditar = () => {
-    //console.log(`id: ${idTarefa} \n titulo: ${tituloTarefa} \n descrição: ${descricaoTarefa} \n inicio: ${inicioTarefa} \n fim: ${fimTarefa} \n recurso: ${recursoTarefa} \n status: ${statusTarefa}`);
-    //console.log('idTarefaSelecionada: ' + idTarefaSelecionada);
     setTarefas(current =>
       current.map(obj => {
-        if (obj.idTarefa === idTarefaSelecionada) {
-          console.log('obj: ' + JSON.stringify(obj));          
+        if (obj.idTarefa === idTarefaSelecionada) {   
           return {...obj, 
-              idTarefa:idTarefaSelecionada,
-              tituloTarefa:tituloTarefa,
-              descricaoTarefa:descricaoTarefa,
-              inicioTarefa:inicioTarefa,
-              fimTarefa:fimTarefa,
-              recursoTarefa:recursoTarefa,
-              statusTarefa:statusTarefa
+              idTarefa,
+              tituloTarefa,
+              descricaoTarefa,
+              inicioTarefa,
+              fimTarefa,
+              statusTarefa
           };
         }
 
         return obj;
       }),
     );
-
-    //console.log(`Tarefas Editadas: ` + JSON.stringify(tarefas));
     handleCloseEditar();
   };
 
@@ -117,27 +104,7 @@ const EditarTarefa = ({handleCloseEditar, idTarefaSelecionada, tarefas, tarefa, 
             </Grid>
             <Grid item xs={3}>  
               <FormControl fullWidth>
-                <InputLabel htmlFor="tarefa_recurso">Recurso</InputLabel>
-                <Select
-                  id="tarefa_recurso"
-                  value={recursoTarefa}
-                  label="Recurso"
-                  onChange={handleRecurso}
-                  size="small"
-                  sx={{
-                    color:'rgba(0, 0, 0, 0.6)',
-                    fontWeight: 400,
-                  }} 
-                >
-                  <MenuItem value={'Recurso 1'}>Recurso 1</MenuItem>
-                  <MenuItem value={'Recurso 2'}>Recurso 2</MenuItem>
-                  <MenuItem value={'Recurso 3'}>Recurso 3</MenuItem>
-                </Select>
-              </FormControl>
-            </Grid>
-            <Grid item xs={3}>  
-              <FormControl fullWidth>
-                <InputLabel htmlFor="tarefa_recurso">Status</InputLabel>
+                <InputLabel>Status</InputLabel>
                 <Select
                   id="tarefa_status"
                   value={statusTarefa}
